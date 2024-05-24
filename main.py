@@ -2,116 +2,163 @@ import time
 import json
 import telebot
 
-##TOKEN DETAILS
-TOKEN = "Netflix Cookies"
+## TOKEN DETAILS
+TOKEN = "TRON"
+
 BOT_TOKEN = "7178545425:AAEiglxEGFiXMSVxQGsoe-T5RWKUbhz046w"
-PAYMENT_CHANNEL = "@cookwithd" #add payment channel here including the '@' sign
-OWNER_ID = 5577450357 #write owner's user id here
-CHANNELS = ["@dailynetflixcookiesfree"] #add channels to be checked here in the format - ["Channel 1", "Channel 2"]
-Points_Per_Refer = 1 # Points per refer
-Required_Referals_For_Withdraw = 3 # Required referals to withdraw
+PAYMENT_CHANNEL = "@cookwithd"  # add payment channel here including the '@' sign
+OWNER_ID = 5577450357  # write owner's user id here
+CHANNELS = ["@dailynetflixcookiesfree"]  # add channels to be checked here in the format - ["Channel 1", "Channel 2"]
+# you can add as many channels here and also add the '@' sign before channel username
+
+Mini_Withdraw = 3  # minimum withdrawal amount
 
 bot = telebot.TeleBot(BOT_TOKEN)
 
-def check_user_joined(id):
-    for channel in CHANNELS:
-        check = bot.get_chat_member(channel, id)
-        if check.status == 'left':
+def check(id):
+    for i in CHANNELS:
+        check = bot.get_chat_member(i, id)
+        if check.status != 'left':
+            pass
+        else:
             return False
     return True
 
-def update_user_data(user, key, default_value):
-    data = json.load(open('users.json', 'r'))
-    if user not in data[key]:
-        data[key][user] = default_value
-        json.dump(data, open('users.json', 'w'))
-    return data
-
 def menu(id):
     keyboard = telebot.types.ReplyKeyboardMarkup(True)
-    keyboard.row('🏠 Home')
-    keyboard.row('👥 Invite', '💰 Withdraw')
-    keyboard.row('🔍 Balance', '📞 Support')
-    bot.send_message(id, "*🏡 Home*", parse_mode="Markdown", reply_markup=keyboard)
+    keyboard.row('🆔 Account')
+    keyboard.row('🙌🏻 Referrals', '💸 Withdraw')
+    keyboard.row('⚙️ Set Wallet', '📊 Statistics')
+    bot.send_message(id, "*🏡 Home*", parse_mode="Markdown",
+                     reply_markup=keyboard)
 
 @bot.message_handler(commands=['start'])
 def start(message):
     try:
-        user = str(message.chat.id)
-        data = json.load(open('users.json', 'r'))
-        data = update_user_data(user, 'referred', 0)
-        data = update_user_data(user, 'referby', user)
-        data = update_user_data(user, 'balance', 0)
-        data = update_user_data(user, 'points', 0)
-        json.dump(data, open('users.json', 'w'))
-        
-        if not check_user_joined(message.chat.id):
+        user = message.chat.id
+        msg = message.text
+        if msg == '/start':
+            user = str(user)
+            data = json.load(open('users.json', 'r'))
+            if user not in data['referred']:
+                data['referred'][user] = 0
+                data['total'] = data['total'] + 1
+            if user not in data['referby']:
+                data['referby'][user] = user
+            if user not in data['checkin']:
+                data['checkin'][user] = 0
+            if user not in data['balance']:
+                data['balance'][user] = 0
+            if user not in data['withd']:
+                data['withd'][user] = 0
+            if user not in data['id']:
+                data['id'][user] = data['total'] + 1
+            json.dump(data, open('users.json', 'w'))
             markup = telebot.types.InlineKeyboardMarkup()
-            markup.add(telebot.types.InlineKeyboardButton(text='📢 Join our Channel', url=f"https://t.me/{CHANNELS[0][1:]}"))
-            bot.send_message(message.chat.id, "You need to join our channel to use this bot.", reply_markup=markup)
+            markup.add(telebot.types.InlineKeyboardButton(
+                text='🤼‍♂️ Joined', callback_data='check'))
+            msg_start = "*🍔 To Use This Bot You Need To Join This Channel - "
+            for i in CHANNELS:
+                msg_start += f"\n➡️ {i}\n"
+            msg_start += "*"
+            bot.send_message(user, msg_start,
+                             parse_mode="Markdown", reply_markup=markup)
         else:
-            bot.send_message(message.chat.id, "Welcome! You can now use the bot.", parse_mode="Markdown")
-            menu(message.chat.id)
-    except Exception as e:
-        bot.send_message(OWNER_ID, f"Error in start command: {e}")
-
-@bot.message_handler(commands=['check'])
-def check(message):
-    if check_user_joined(message.chat.id):
-        bot.send_message(message.chat.id, "You have joined the channel and can use the bot now.")
-        menu(message.chat.id)
-    else:
-        markup = telebot.types.InlineKeyboardMarkup()
-        markup.add(telebot.types.InlineKeyboardButton(text='📢 Join our Channel', url=f"https://t.me/{CHANNELS[0][1:]}"))
-        bot.send_message(message.chat.id, "You need to join our channel to use this bot.", reply_markup=markup)
-
-@bot.message_handler(content_types=['text'])
-def send_text(message):
-    user = str(message.chat.id)
-    data = json.load(open('users.json', 'r'))
-
-    if message.text == '👥 Invite':
-        bot_name = bot.get_me().username
-        ref_link = f'https://telegram.me/{bot_name}?start={message.chat.id}'
-        bot.send_message(message.chat.id, f"Invite your friends using this link:\n{ref_link}\nEarn 1 point per referral. Get 3 points to withdraw 1 Netflix Cookie.")
-
-    elif message.text == '💰 Withdraw':
-        if data['points'][user] >= Required_Referals_For_Withdraw:
-            data['points'][user] -= Required_Referals_For_Withdraw
+            data = json.load(open('users.json', 'r'))
+            user = message.chat.id
+            user = str(user)
+            refid = message.text.split()[1]
+            if user not in data['referred']:
+                data['referred'][user] = 0
+                data['total'] = data['total'] + 1
+            if user not in data['referby']:
+                data['referby'][user] = refid
+            if user not in data['checkin']:
+                data['checkin'][user] = 0
+            if user not in data['balance']:
+                data['balance'][user] = 0
+            if user not in data['withd']:
+                data['withd'][user] = 0
+            if user not in data['id']:
+                data['id'][user] = data['total'] + 1
             json.dump(data, open('users.json', 'w'))
-            bot.send_message(message.chat.id, "Your withdraw request has been sent. Cookies will be Sent 7AM - 10PM (IST)")
-            bot.send_message(PAYMENT_CHANNEL, f"User @{message.from_user.username} ({message.chat.id}) has requested a withdrawal. Points: {Required_Referals_For_Withdraw}")
-        else:
-            bot.send_message(message.chat.id, f"You need {Required_Referals_For_Withdraw} points to withdraw.")
+            markups = telebot.types.InlineKeyboardMarkup()
+            markups.add(telebot.types.InlineKeyboardButton(
+                text='🤼‍♂️ Joined', callback_data='check'))
+            msg_start = "*🍔 To Use This Bot You Need To Join This Channel - \n➡️ @ Fill your channels at line: 101 and 157*"
+            bot.send_message(user, msg_start,
+                             parse_mode="Markdown", reply_markup=markups)
+    except:
+        bot.send_message(message.chat.id, "This command is having an error. Please wait for fixing the glitch by the admin.")
+        bot.send_message(OWNER_ID, "Your bot got an error. Please fix it fast!\n Error on command: " + message.text)
+        return
 
-    elif message.text == '🔍 Balance':
-        points = data['points'][user]
-        bot.send_message(message.chat.id, f"You have {points} points.")
-
-    elif message.text == '📞 Support':
-        bot.send_message(message.chat.id, "For support, contact @your_support_contact")
-
-    elif message.text == '🏠 Home':
-        menu(message.chat.id)
-
-@bot.message_handler(commands=['referral'])
-def referral(message):
+@bot.callback_query_handler(func=lambda call: True)
+def query_handler(call):
     try:
-        referrer_id = message.text.split()[1]
-        user = str(message.chat.id)
-        data = json.load(open('users.json', 'r'))
-        
-        if user not in data['referred']:
-            data['referred'][user] = 0
-            data['referby'][user] = referrer_id
-            json.dump(data, open('users.json', 'w'))
-            
-            if referrer_id != user:
-                data['points'][referrer_id] += Points_Per_Refer
+        ch = check(call.message.chat.id)
+        if call.data == 'check':
+            if ch == True:
+                data = json.load(open('users.json', 'r'))
+                user_id = call.message.chat.id
+                user = str(user_id)
+                bot.answer_callback_query(
+                    callback_query_id=call.id, text='✅ You joined. Now you can earn points.')
+                bot.delete_message(call.message.chat.id, call.message.message_id)
+                if user not in data['refer']:
+                    data['refer'][user] = True
+
+                    if user not in data['referby']:
+                        data['referby'][user] = user
+                        json.dump(data, open('users.json', 'w'))
+                    if int(data['referby'][user]) != user_id:
+                        ref_id = data['referby'][user]
+                        ref = str(ref_id)
+                        if ref not in data['balance']:
+                            data['balance'][ref] = 0
+                        if ref not in data['referred']:
+                            data['referred'][ref] = 0
+                        json.dump(data, open('users.json', 'w'))
+                        data['balance'][ref] += Per_Refer
+                        data['referred'][ref] += 1
+                        bot.send_message(
+                            ref_id, f"*🏧 New Referral on Level 1, You Got: +{Per_Refer} {TOKEN}*", parse_mode="Markdown")
+                        json.dump(data, open('users.json', 'w'))
+                        return menu(call.message.chat.id)
+
+                    else:
+                        json.dump(data, open('users.json', 'w'))
+                        return menu(call.message.chat.id)
+
+                else:
+                    json.dump(data, open('users.json', 'w'))
+                    menu(call.message.chat.id)
+
+            else:
+                bot.answer_callback_query(
+                    callback_query_id=call.id, text='❌ You have not joined the required channel.')
+                bot.delete_message(call.message.chat.id, call.message.message_id)
+                markup = telebot.types.InlineKeyboardMarkup()
+                markup.add(telebot.types.InlineKeyboardButton(
+                    text='🤼‍♂️ Joined', callback_data='check'))
+                msg_start = "*🍔 To Use This Bot You Need To Join This Channel - \n➡️ @ Fill your channels at line: 101 and 157"
+                bot.send_message(call.message.chat.id, msg_start,
+                                 parse_mode="Markdown", reply_markup=markup)
+        elif call.data == 'withdraw':
+            user = str(call.message.chat.id)
+            data = json.load(open('users.json', 'r'))
+            if user in data['balance'] and data['balance'][user] >= Mini_Withdraw:
+                data['balance'][user] -= Mini_Withdraw
+                data['withd'][user] += Mini_Withdraw
                 json.dump(data, open('users.json', 'w'))
-                bot.send_message(referrer_id, f"You have earned {Points_Per_Refer} points for a referral.")
-                
-        menu(message.chat.id)
+                bot.send_message(call.message.chat.id, "You will receive cookies. 🍪")
+            else:
+                bot.send_message(call.message.chat.id, "Not enough balance or below minimum withdrawal amount.")
+    except:
+        bot.send_message(call.message.chat.id, "This command is having an error. Please wait for fixing the glitch")
+
+bot.polling()
+
     except Exception as e:
         bot.send_message(OWNER_ID, f"Error in referral command: {e}")
 
