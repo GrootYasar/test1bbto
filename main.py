@@ -183,6 +183,11 @@ def send_text(message):
         msg = accmsg.format(message.from_user.first_name,
                             wallet, balance, TOKEN)
         bot.send_message(message.chat.id, msg, parse_mode="Markdown")
+      
+    if message.text == "Support":
+        user_id = message.chat.idmsg = "\*Cookies doesn't work? Send SS @TechieLoveBot \[Need to send Proof within 1hr after received Cookies\] \\nIf You Have A Major Problem Then You Can Directly Contact To Owner - @SinWarX\*"
+        bot.send_message(chat_id=user_id, text=msg, parse_mode="Markdown")
+      
     if message.text == '🙌🏻 Referrals':
         data = json.load(open('users.json', 'r'))
         ref_msg = "*⏯️ Total Invites : {} Users\n\n👥 Refferrals System\n\n1 Level:\n🥇 Level°1 - {} {}\n\n🔗 Referral Link ⬇️\n{}*"
@@ -235,9 +240,7 @@ def send_text(message):
         msg = msg.format(data['total'], data['totalwith'], TOKEN)
         bot.send_message(user_id, msg, parse_mode="Markdown")
         return
-    if message.text == "Support":
-        user_id = message.chat.idmsg = "\*Cookies doesn't work? Send SS @TechieLoveBot \[Need to send Proof within 1hr after received Cookies\] \\nIf You Have A Major Problem Then You Can Directly Contact To Owner - @SinWarX\*"
-        bot.send_message(chat_id=user_id, text=msg, parse_mode="MarkdownV2")
+
         
     if message.text == "💸 Withdraw":
         user_id = message.chat.id
