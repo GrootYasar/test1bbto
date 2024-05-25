@@ -236,7 +236,8 @@ def send_text(message):
         bot.send_message(user_id, msg, parse_mode="Markdown")
         return
     if message.text == "Support":
-        msg = "*Cookies doesn't work? Send SS @TechieLoveBot [Need to send Proof within 1hr after received Cookies] \nIf You Have A Major Problem Then You Can Directly Contact To Owner - @SinWarX*"
+        user_id = message.chat.idmsg = "\*Cookies doesn't work? Send SS @TechieLoveBot \[Need to send Proof within 1hr after received Cookies\] \\nIf You Have A Major Problem Then You Can Directly Contact To Owner - @SinWarX\*"
+        bot.send_message(chat_id=user_id, text=msg, parse_mode="MarkdownV2")
         
     if message.text == "💸 Withdraw":
         user_id = message.chat.id
