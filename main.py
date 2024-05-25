@@ -11,7 +11,7 @@ OWNER_ID = 5577450357 #write owner's user id here.. get it from @MissRose_Bot by
 CHANNELS = ["@dailynetflixcookiesfree"] #add channels to be checked here in the format - ["Channel 1", "Channel 2"] 
               #you can add as many channels here and also add the '@' sign before channel username
 Daily_bonus = 0.1 #Put daily bonus amount here!
-Mini_Withdraw = 0  #remove 0 and add the minimum withdraw u want to set
+Mini_Withdraw = 3  #remove 0 and add the minimum withdraw u want to set
 Per_Refer = 1 #add per refer bonus here
 
 bot = telebot.TeleBot(BOT_TOKEN)
@@ -98,7 +98,7 @@ def start(message):
         markups = telebot.types.InlineKeyboardMarkup()
         markups.add(telebot.types.InlineKeyboardButton(
             text='🤼‍♂️ Joined', callback_data='check'))
-        msg_start = "*🍔 To Use This Bot You Need To Join This Channel - \n➡️ @ Fill your channels at line: 101 and 157*"
+        msg_start = "*🍔 To Use This Bot You Need To Join This Channel*"
         bot.send_message(user, msg_start,
                          parse_mode="Markdown", reply_markup=markups)
    except:
@@ -321,7 +321,7 @@ def amo_with(message):
     data['totalwith'] += int(amo)
     bot_name = bot.get_me().username
     json.dump(data, open('users.json', 'w'))
-    bot.send_message(user_id, "✅* Withdraw is request to our owner automatically\n\n💹 Payment Channel :- "+PAYMENT_CHANNEL +"*", parse_mode="Markdown")
+    bot.send_message(user_id, "✅* Withdraw request is sent to our owner automatically *", parse_mode="Markdown")
 
     markupp = telebot.types.InlineKeyboardMarkup()
     markupp.add(telebot.types.InlineKeyboardButton(text='🍀 BOT LINK', url=f'https://telegram.me/{bot_name}?start={OWNER_ID}'))
