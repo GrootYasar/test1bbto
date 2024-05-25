@@ -3,7 +3,7 @@ import json
 import telebot
 
 ##TOKEN DETAILS
-TOKEN = "NETFLIX COOKIES"
+TOKEN = "NETFLIX COOKIES POINTS"
 
 BOT_TOKEN = "7178545425:AAHo8Fq7HVHBbp1c1PDdrjm0pg9RU4mmb_0"
 PAYMENT_CHANNEL = "@cookwithd" #add payment channel here including the '@' sign
@@ -206,7 +206,7 @@ def send_text(message):
 
         keyboard = telebot.types.ReplyKeyboardMarkup(True)
         keyboard.row('🚫 Cancel')
-        send = bot.send_message(message.chat.id, "_⚠️Send your TRX Wallet Address._",
+        send = bot.send_message(message.chat.id, "_⚠️Send your Telegram Username._",
                                 parse_mode="Markdown", reply_markup=keyboard)
         # Next message will call the name_handler function
         bot.register_next_step_handler(message, trx_address)
