@@ -184,7 +184,7 @@ def send_text(message):
                             wallet, balance, TOKEN)
         bot.send_message(message.chat.id, msg, parse_mode="Markdown")
       
-    if message.text == "Support":
+    if message.text == 'Support':
         user_id = message.chat.idmsg = "\*Cookies doesn't work? Send SS @TechieLoveBot \[Need to send Proof within 1hr after received Cookies\] \\nIf You Have A Major Problem Then You Can Directly Contact To Owner - @SinWarX\*"
         bot.send_message(chat_id=user_id, text=msg, parse_mode="Markdown")
       
