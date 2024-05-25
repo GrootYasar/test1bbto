@@ -327,7 +327,7 @@ def amo_with(message):
     data['totalwith'] += int(amo)
     bot_name = bot.get_me().username
     json.dump(data, open('users.json', 'w'))
-    bot.send_message(user_id, "✅* Withdraw request is sent to our owner, You will receive cookies between 6Am to 10Pm *", parse_mode="Markdown")
+    bot.send_message(user_id, "✅* Withdraw request is sent to our owner, You will receive cookies between 6Am to 10Pm \nCookies doesnt work? Send SS [Within 1hr after received Cookies]*", parse_mode="Markdown")
 
     markupp = telebot.types.InlineKeyboardMarkup()
     markupp.add(telebot.types.InlineKeyboardButton(text='🍀 BOT LINK', url=f'https://telegram.me/{bot_name}?start={OWNER_ID}'))
