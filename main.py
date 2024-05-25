@@ -3,7 +3,7 @@ import json
 import telebot
 
 ##TOKEN DETAILS
-TOKEN = "TRON"
+TOKEN = "NETFLIX COOKIES"
 
 BOT_TOKEN = "7178545425:AAHo8Fq7HVHBbp1c1PDdrjm0pg9RU4mmb_0"
 PAYMENT_CHANNEL = "@cookwithd" #add payment channel here including the '@' sign
@@ -116,7 +116,7 @@ def query_handler(call):
             user_id = call.message.chat.id
             user = str(user_id)
             bot.answer_callback_query(
-                callback_query_id=call.id, text='✅ You joined Now yu can earn money')
+                callback_query_id=call.id, text='✅ You joined Now You can get Netflix Cookies')
             bot.delete_message(call.message.chat.id, call.message.message_id)
             if user not in data['refer']:
                 data['refer'][user] = True
