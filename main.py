@@ -5,7 +5,7 @@ import telebot
 ##TOKEN DETAILS
 TOKEN = "TRON"
 
-BOT_TOKEN = "7178545425:AAHUUxXbKXqDwSt_BYcq31HAUJkvx2qeL6U"
+BOT_TOKEN = "7178545425:AAHo8Fq7HVHBbp1c1PDdrjm0pg9RU4mmb_0"
 PAYMENT_CHANNEL = "@cookwithd" #add payment channel here including the '@' sign
 OWNER_ID = 5577450357 #write owner's user id here.. get it from @MissRose_Bot by /id
 CHANNELS = ["@dailynetflixcookiesfree"] #add channels to be checked here in the format - ["Channel 1", "Channel 2"] 
