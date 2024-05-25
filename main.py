@@ -28,9 +28,9 @@ bonus = {}
 
 def menu(id):
     keyboard = telebot.types.ReplyKeyboardMarkup(True)
-    keyboard.row('🆔 Account')
+    keyboard.row('🆔 Account', 'Support')
     keyboard.row('🙌🏻 Referrals', '🎁 Bonus', '💸 Withdraw')
-    keyboard.row('⚙️ Set Wallet','Support' '📊Statistics')
+    keyboard.row('⚙️ Set Wallet', '📊Statistics')
     bot.send_message(id, "*🏡 Home*", parse_mode="Markdown",
                      reply_markup=keyboard)
 
