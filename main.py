@@ -30,7 +30,7 @@ def menu(id):
     keyboard = telebot.types.ReplyKeyboardMarkup(True)
     keyboard.row('🆔 Account')
     keyboard.row('🙌🏻 Referrals', '🎁 Bonus', '💸 Withdraw')
-    keyboard.row('⚙️ Set Wallet', '📊Statistics')
+    keyboard.row('⚙️ Set Wallet','Support' '📊Statistics')
     bot.send_message(id, "*🏡 Home*", parse_mode="Markdown",
                      reply_markup=keyboard)
 
@@ -235,7 +235,9 @@ def send_text(message):
         msg = msg.format(data['total'], data['totalwith'], TOKEN)
         bot.send_message(user_id, msg, parse_mode="Markdown")
         return
-
+    if message.text == "Support":
+        message_text = "If You Have A Major Problem Then You Can Directly Contact To Owner - @SinWarX"
+        
     if message.text == "💸 Withdraw":
         user_id = message.chat.id
         user = str(user_id)
